@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#101010"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Logo -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="TASKFLOW"
+            android:textColor="#39FF14"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.2"
+            android:shadowColor="#39FF14"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="18" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="Organiza el futuro, una tarea a la vez"
+            android:textColor="#A0A0A0"
+            android:textSize="14sp" />
+
+        <!-- Título -->
+
+        <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/neon_background"
+            android:hint="Título de la tarea"
+            android:textColorHint="#6D6D6D"
+            android:inputType="textCapSentences"
+            android:padding="14dp"
+            android:textColor="#FFFFFF" />
+
+        <!-- Descripción -->
+
+        <EditText
+            android:id="@+id/etDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/neon_background"
+            android:hint="Descripción"
+            android:textColorHint="#6D6D6D"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top|start"
+            android:padding="14dp"
+            android:textColor="#FFFFFF" />
+
+        <!-- Categoría -->
+
+        <EditText
+            android:id="@+id/etCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/neon_background"
+            android:hint="Categoría"
+            android:textColorHint="#6D6D6D"
+            android:padding="14dp"
+            android:textColor="#FFFFFF" />
+
+        <!-- Prioridad -->
+
+        <EditText
+            android:id="@+id/etPriority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/neon_background"
+            android:hint="Prioridad (1 - 3)"
+            android:textColorHint="#6D6D6D"
+            android:inputType="number"
+            android:padding="14dp"
+            android:textColor="#FFFFFF" />
+
+        <!-- Estado -->
+
+        <Spinner
+            android:id="@+id/spStatus"
+            android:layout_width="match_parent"
+            android:layout_height="57dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/neon_background"
+            android:padding="8dp" />
+
+        <!-- Botón -->
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_marginTop="22dp"
+            android:backgroundTint="#39FF14"
+            android:elevation="8dp"
+            android:text="➕ CREAR TAREA"
+            android:textAllCaps="false"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Separador -->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="18dp"
+            android:background="#39FF14" />
+
+        <!-- Lista -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MIS TAREAS"
+            android:textColor="#39FF14"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:shadowColor="#39FF14"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="10" />
+
+        <TextView
+            android:id="@+id/tvTasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/neon_background"
+            android:minHeight="150dp"
+            android:padding="16dp"
+            android:text="No hay tareas aún"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+</ScrollView>

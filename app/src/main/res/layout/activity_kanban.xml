@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#101010">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TABLERO KANBAN"
+            android:textColor="#39FF14"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <!-- Pendiente -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="📌 PENDIENTE"
+            android:textColor="#39FF14"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:id="@+id/layoutPending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/neon_background"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No hay tareas"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <!-- En progreso -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="⚡ EN PROGRESO"
+            android:textColor="#39FF14"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:id="@+id/layoutProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/neon_background"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No hay tareas"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <!-- Completado -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="✅ COMPLETADO"
+            android:textColor="#39FF14"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:id="@+id/layoutCompleted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/neon_background"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No hay tareas"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

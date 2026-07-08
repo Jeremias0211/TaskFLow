@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TaskFlow</string>
+
+    <string name="hint_title">Título de la tarea</string>
+    <string name="hint_category">Categoría (Ej: Escuela, Trabajo)</string>
+    <string name="hint_priority">Prioridad (1 a 5)</string>
+
+    <string name="btn_add">Agregar tarea</string>
+    <string name="task_list">Lista de tareas:</string>
+</resources>
