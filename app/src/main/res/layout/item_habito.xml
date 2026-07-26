@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="16dp"
+    android:background="@android:color/background_dark">
+
+    <TextView
+        android:id="@+id/tvNombreHabito"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="📚 Leer"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#39FF14"/>
+
+    <GridLayout
+        android:id="@+id/gridDias"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:columnCount="7">
+
+    </GridLayout>
+    <ProgressBar
+        android:id="@+id/progresoHabito"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:max="31"
+        android:progress="0"
+        android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/tvProgreso"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 / 31 días"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
+    <TextView
+        android:id="@+id/tvRacha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🔥 Racha: 0 días"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:layout_marginTop="12dp"/>
+
+</LinearLayout>
