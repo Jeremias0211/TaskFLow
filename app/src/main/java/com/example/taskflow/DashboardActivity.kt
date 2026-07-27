@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var btnHabitos: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +23,7 @@ class DashboardActivity : AppCompatActivity() {
         val btnCreateTask = findViewById<Button>(R.id.btnCreateTask)
         val btnLogout = findViewById<Button>(R.id.btnLogout)
         val tvWelcome = findViewById<TextView>(R.id.tvWelcome)
+        btnHabitos = findViewById(R.id.btnHabitos)
 
         val usuario = auth.currentUser
 
@@ -50,6 +52,13 @@ class DashboardActivity : AppCompatActivity() {
             )
 
             finish()
+        }
+
+        btnHabitos.setOnClickListener {
+
+            val intent = Intent(this, HabitosActivity::class.java)
+            startActivity(intent)
+
         }
     }
 }

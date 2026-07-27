@@ -105,6 +105,15 @@
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
 
+        <Button
+            android:id="@+id/btnHabitos"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#39FF14"
+            android:text="📅 HÁBITOS"
+            android:textColor="#000000"
+            android:textStyle="bold"/>
     </LinearLayout>
 
 </ScrollView>
