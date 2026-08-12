@@ -2,15 +2,14 @@ package com.example.taskflow
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var btnHabitos: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,11 +18,8 @@ class DashboardActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        val btnKanban = findViewById<Button>(R.id.btnKanban)
-        val btnCreateTask = findViewById<Button>(R.id.btnCreateTask)
-        val btnLogout = findViewById<Button>(R.id.btnLogout)
         val tvWelcome = findViewById<TextView>(R.id.tvWelcome)
-        btnHabitos = findViewById(R.id.btnHabitos)
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
         val usuario = auth.currentUser
 
@@ -31,34 +27,43 @@ class DashboardActivity : AppCompatActivity() {
             tvWelcome.text = "Hola 👋\n${usuario.email}"
         }
 
-        btnKanban.setOnClickListener {
-            startActivity(
-                Intent(this, KanbanActivity::class.java)
-            )
-        }
+        // Marcamos Inicio como seleccionado
+        bottomNavigation.selectedItemId = R.id.nav_home
 
-        btnCreateTask.setOnClickListener {
-            startActivity(
-                Intent(this, CreateTaskActivity::class.java)
-            )
-        }
+        bottomNavigation.setOnItemSelectedListener { item ->
 
-        btnLogout.setOnClickListener {
+            when (item.itemId) {
 
-            auth.signOut()
+                R.id.nav_home -> {
+                    true
+                }
 
-            startActivity(
-                Intent(this, LoginActivity::class.java)
-            )
+                R.id.nav_kanban -> {
+                    startActivity(
+                        Intent(this, KanbanActivity::class.java)
+                    )
+                    true
+                }
 
-            finish()
-        }
+                R.id.nav_create -> {
+                    startActivity(
+                        Intent(this, CreateTaskActivity::class.java)
+                    )
+                    true
+                }
 
-        btnHabitos.setOnClickListener {
 
-            val intent = Intent(this, HabitosActivity::class.java)
-            startActivity(intent)
+                R.id.nav_profile -> {
+                    startActivity(
+                        Intent(this, ProfileActivity::class.java)
+                    )
+                    true
+                }
 
+                else -> false
+            }
         }
     }
+
+
 }

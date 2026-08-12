@@ -1,119 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="#101010">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TASKFLOW"
-            android:textColor="#39FF14"
-            android:textSize="32sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvWelcome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Hola 👋"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
-
-        <!-- Estadísticas -->
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="24dp">
 
             <TextView
-                android:id="@+id/tvPending"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:background="@drawable/neon_background"
-                android:gravity="center"
-                android:text="Pendientes\n0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TASKFLOW"
+                android:textColor="#39FF14"
+                android:textSize="32sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Hola 👋"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
 
-            <Space
-                android:layout_width="10dp"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvPending"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/neon_background"
+                    android:gravity="center"
+                    android:text="Pendientes\n0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvProgress"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/neon_background"
+                    android:gravity="center"
+                    android:text="En progreso\n0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/tvProgress"
-                android:layout_width="0dp"
+                android:id="@+id/tvCompleted"
+                android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_weight="1"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/neon_background"
                 android:gravity="center"
-                android:text="En progreso\n0"
+                android:text="Completadas\n0"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvCompleted"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/neon_background"
-            android:gravity="center"
-            android:text="Completadas\n0"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+    </ScrollView>
 
-        <!-- Botones -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#181818"
+        app:itemIconTint="#39FF14"
+        app:itemRippleColor="#2039FF14"
+        app:itemTextColor="#FFFFFF"
+        app:menu="@menu/bottom_nav_menu" />
 
-        <Button
-            android:id="@+id/btnKanban"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#39FF14"
-            android:text="📋 VER TABLERO"
-            android:textColor="#000000"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnCreateTask"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="#39FF14"
-            android:text="➕ CREAR TAREA"
-            android:textColor="#000000"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="#F44336"
-            android:text="🚪 CERRAR SESIÓN"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnHabitos"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="#39FF14"
-            android:text="📅 HÁBITOS"
-            android:textColor="#000000"
-            android:textStyle="bold"/>
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

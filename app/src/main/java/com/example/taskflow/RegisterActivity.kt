@@ -2,8 +2,11 @@ package com.example.taskflow
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -35,67 +38,157 @@ class RegisterActivity : AppCompatActivity() {
             val password = etPassword.text.toString().trim()
             val confirmPassword = etConfirmPassword.text.toString().trim()
 
-            if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+            // Limpiamos errores anteriores
+            etName.error = null
+            etEmail.error = null
+            etPassword.error = null
+            etConfirmPassword.error = null
+
+            // Comprobar campos vacíos
+            var hayError = false
+
+            if (name.isEmpty()) {
+                etName.error = "Campo vacío"
+                hayError = true
+            }
+
+            if (email.isEmpty()) {
+                etEmail.error = "Campo vacío"
+                hayError = true
+            }
+
+            if (password.isEmpty()) {
+                etPassword.error = "Campo vacío"
+                hayError = true
+            }
+
+            if (confirmPassword.isEmpty()) {
+                etConfirmPassword.error = "Campo vacío"
+                hayError = true
+            }
+
+            if (hayError) {
+                mostrarMensaje(
+                    "Completa todos los campos",
+                    R.drawable.error
+                )
                 return@setOnClickListener
             }
 
+            // Comprobar que las contraseñas coincidan
             if (password != confirmPassword) {
-                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+
+                etConfirmPassword.error = "Las contraseñas no coinciden"
+
+                mostrarMensaje(
+                    "Las contraseñas no coinciden",
+                    R.drawable.error
+                )
+
                 return@setOnClickListener
             }
 
+            // Comprobar longitud de contraseña
             if (password.length < 6) {
-                Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
+
+                etPassword.error = "Mínimo 6 caracteres"
+
+                mostrarMensaje(
+                    "La contraseña debe tener al menos 6 caracteres",
+                    R.drawable.error
+                )
+
                 return@setOnClickListener
             }
 
+            // Crear cuenta en Firebase Authentication
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
 
                     if (task.isSuccessful) {
 
-                        val uid = auth.currentUser!!.uid
+                        val usuarioActual = auth.currentUser
 
-                        val usuario = hashMapOf(
-                            "nombre" to name,
-                            "email" to email
-                        )
+                        if (usuarioActual != null) {
 
-                        db.collection("usuarios")
-                            .document(uid)
-                            .set(usuario)
+                            val uid = usuarioActual.uid
 
-                        Toast.makeText(
-                            this,
-                            "Cuenta creada correctamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            val usuario = hashMapOf(
+                                "nombre" to name,
+                                "email" to email
+                            )
 
-                        Toast.makeText(
-                            this,
-                            "Cuenta creada correctamente. Ahora iniciá sesión.",
-                            Toast.LENGTH_LONG
-                        ).show()
+                            // Guardar usuario en Firestore
+                            db.collection("usuarios")
+                                .document(uid)
+                                .set(usuario)
+                                .addOnSuccessListener {
 
-                        auth.signOut()
+                                    mostrarMensaje(
+                                        "Cuenta creada correctamente",
+                                        R.drawable.check
+                                    )
 
-                        startActivity(
-                            Intent(this, LoginActivity::class.java)
-                        )
+                                    // Cerrar sesión para que tenga
+                                    // que iniciar sesión manualmente
+                                    auth.signOut()
 
-                        finish()
+                                    // Volver al Login
+                                    startActivity(
+                                        Intent(
+                                            this,
+                                            LoginActivity::class.java
+                                        )
+                                    )
 
+                                    finish()
+                                }
+                                .addOnFailureListener { exception ->
+
+                                    mostrarMensaje(
+                                        "Error al guardar usuario: ${exception.message}",
+                                        R.drawable.error
+                                    )
+                                }
+
+                        }
 
                     } else {
 
-                        Toast.makeText(
-                            this,
-                            task.exception?.message,
-                            Toast.LENGTH_LONG
-                        ).show()
+                        mostrarMensaje(
+                            task.exception?.localizedMessage
+                                ?: "No se pudo crear la cuenta",
+                            R.drawable.error
+                        )
                     }
                 }
         }
+    }
+
+    // Toast personalizado con imagen
+    private fun mostrarMensaje(
+        mensaje: String,
+        imagen: Int
+    ) {
+
+        val vista = LayoutInflater.from(this)
+            .inflate(R.layout.toast_custom, null)
+
+        val icono = vista.findViewById<ImageView>(
+            R.id.toastIcon
+        )
+
+        val texto = vista.findViewById<TextView>(
+            R.id.toastText
+        )
+
+        icono.setImageResource(imagen)
+        texto.text = mensaje
+
+        val toast = Toast(this)
+
+        toast.duration = Toast.LENGTH_SHORT
+        toast.view = vista
+        toast.show()
     }
 }
