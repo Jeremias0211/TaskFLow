@@ -52,6 +52,12 @@ class DashboardActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.nav_habitos -> {
+                    startActivity(
+                        Intent(this, HabitosActivity::class.java)
+                    )
+                    true
+                }
 
                 R.id.nav_profile -> {
                     startActivity(
@@ -64,6 +70,4 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }
