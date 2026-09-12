@@ -1,155 +1,115 @@
-package com.example.taskflow
+<?xml version="1.0" encoding="utf-8"?>
 
-    import android.content.Intent
-    import android.os.Bundle
-    import android.widget.TextView
-    import android.widget.Toast
-    import androidx.appcompat.app.AppCompatActivity
-    import com.google.android.material.bottomnavigation.BottomNavigationView
-    import com.google.firebase.auth.FirebaseAuth
-    import com.google.firebase.firestore.FirebaseFirestore
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#101010">
 
-    class DashboardActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    private lateinit var tvPending: TextView
-    private lateinit var tvProgress: TextView
-    private lateinit var tvCompleted: TextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+            <TextView
+                android:id="@+id/tvWelcome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hola 👋"
+                android:textColor="#39FF14"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="30dp" />
 
-    setContentView(R.layout.activity_dashboard)
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RESUMEN DE TAREAS"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="20dp" />
 
-    auth = FirebaseAuth.getInstance()
-    db = FirebaseFirestore.getInstance()
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
-    val tvWelcome = findViewById<TextView>(R.id.tvWelcome)
-    tvPending = findViewById(R.id.tvPending)
-    tvProgress = findViewById(R.id.tvProgress)
-    tvCompleted = findViewById(R.id.tvCompleted)
+                <TextView
+                    android:id="@+id/tvPending"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/neon_background"
+                    android:gravity="center"
+                    android:text="Pendientes&#10;0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-    val bottomNavigation =
-    findViewById<BottomNavigationView>(R.id.bottomNavigation)
+                <TextView
+                    android:id="@+id/tvProgress"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:background="@drawable/neon_background"
+                    android:gravity="center"
+                    android:text="En progreso&#10;0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-        val usuario = auth.currentUser
+                <TextView
+                    android:id="@+id/tvCompleted"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/neon_background"
+                    android:gravity="center"
+                    android:text="Completadas&#10;0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-        if (usuario != null) {
-        tvWelcome.text = "Hola 👋\n${usuario.email}"
+            </LinearLayout>
 
-        cargarContadores(usuario.uid)
-        } else {
-        Toast.makeText(
-        this,
-        "No hay ningún usuario iniciado",
-        Toast.LENGTH_SHORT
-        ).show()
-        }
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Organizá tus tareas, seguí tu progreso y mantené tus hábitos."
+                android:textColor="#BDBDBD"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_marginTop="35dp"
+                android:layout_marginBottom="20dp" />
 
-        bottomNavigation.selectedItemId = R.id.nav_home
+        </LinearLayout>
 
-        bottomNavigation.setOnItemSelectedListener { item ->
+    </ScrollView>
 
-        when (item.itemId) {
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#181818"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        app:menu="@menu/bottom_nav_menu" />
 
-        R.id.nav_home -> {
-        true
-        }
 
-        R.id.nav_kanban -> {
-        startActivity(
-        Intent(this, KanbanActivity::class.java)
-        )
-        true
-        }
-
-        R.id.nav_create -> {
-        startActivity(
-        Intent(this, CreateTaskActivity::class.java)
-        )
-        true
-        }
-
-        R.id.nav_habitos -> {
-        startActivity(
-        Intent(this, HabitosActivity::class.java)
-        )
-        true
-        }
-
-        R.id.nav_profile -> {
-        startActivity(
-        Intent(this, ProfileActivity::class.java)
-        )
-        true
-        }
-
-        else -> false
-        }
-        }
-        }
-
-        override fun onResume() {
-        super.onResume()
-
-        val usuario = auth.currentUser
-
-        if (usuario != null) {
-        cargarContadores(usuario.uid)
-        }
-        }
-
-        private fun cargarContadores(uid: String) {
-
-        db.collection("usuarios")
-        .document(uid)
-        .collection("tareas")
-        .get()
-        .addOnSuccessListener { documentos ->
-
-        var pendientes = 0
-        var enProgreso = 0
-        var completadas = 0
-
-        for (documento in documentos) {
-
-        val status =
-        documento.getString("status") ?: "Pendiente"
-
-        when (status) {
-
-        "Pendiente" -> {
-        pendientes++
-        }
-
-        "En progreso" -> {
-        enProgreso++
-        }
-
-        "Completado" -> {
-        completadas++
-        }
-        }
-        }
-
-        tvPending.text =
-        "Pendientes\n$pendientes"
-
-        tvProgress.text =
-        "En progreso\n$enProgreso"
-
-        tvCompleted.text =
-        "Completadas\n$completadas"
-        }
-        .addOnFailureListener { error ->
-
-        Toast.makeText(
-        this,
-        "Error al cargar las tareas: ${error.message}",
-        Toast.LENGTH_LONG
-        ).show()
-        }
-        }
-        }
+</LinearLayout>

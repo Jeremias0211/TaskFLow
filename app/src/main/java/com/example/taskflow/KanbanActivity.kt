@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class KanbanActivity : AppCompatActivity() {
 
+
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
@@ -156,20 +157,20 @@ class KanbanActivity : AppCompatActivity() {
         val titulo = TextView(this)
 
         titulo.text = tarea.title
-        titulo.textColor = Color.WHITE
+        titulo.setTextColor(Color.WHITE)
         titulo.textSize = 20f
         titulo.setTypeface(null, Typeface.BOLD)
 
         val categoria = TextView(this)
 
         categoria.text = "Categoría: ${tarea.category}"
-        categoria.textColor = Color.LTGRAY
+        categoria.setTextColor(Color.LTGRAY)
         categoria.textSize = 14f
 
         val descripcion = TextView(this)
 
         descripcion.text = tarea.description
-        descripcion.textColor = Color.WHITE
+        descripcion.setTextColor(Color.WHITE)
         descripcion.textSize = 15f
 
         val prioridad = TextView(this)
@@ -177,7 +178,7 @@ class KanbanActivity : AppCompatActivity() {
         prioridad.text =
             "Prioridad: ${obtenerTextoPrioridad(tarea.priority)}"
 
-        prioridad.textColor = Color.rgb(57, 255, 20)
+        prioridad.setTextColor(Color.rgb(57, 255, 20))
         prioridad.textSize = 14f
 
         tarjeta.addView(titulo)
@@ -493,7 +494,7 @@ class KanbanActivity : AppCompatActivity() {
         val mensaje = TextView(this)
 
         mensaje.text = "No hay tareas"
-        mensaje.textColor = Color.WHITE
+        mensaje.setTextColor(Color.WHITE)
         mensaje.textSize = 15f
         mensaje.gravity = Gravity.CENTER
 
@@ -508,4 +509,6 @@ class KanbanActivity : AppCompatActivity() {
         val priority: Int,
         val status: String
     )
+
+
 }

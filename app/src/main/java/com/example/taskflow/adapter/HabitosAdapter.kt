@@ -18,6 +18,7 @@ class HabitosAdapter(
     private val onDiaCambiado: (Int, Int, Boolean) -> Unit = { _, _, _ -> }
 ) : RecyclerView.Adapter<HabitosAdapter.HabitoViewHolder>() {
 
+
     class HabitoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nombre: TextView = itemView.findViewById(R.id.tvNombreHabito)
         val racha: TextView = itemView.findViewById(R.id.tvRacha)
@@ -100,7 +101,7 @@ class HabitosAdapter(
 
             dia.setOnClickListener {
 
-                val posicionActual = holder.bindingAdapterPosition
+                val posicionActual = holder.adapterPosition
 
                 if (posicionActual == RecyclerView.NO_POSITION) {
                     return@setOnClickListener
@@ -123,12 +124,28 @@ class HabitosAdapter(
         }
 
         holder.nombre.setOnClickListener {
-            onEditar(position)
+
+            val posicionActual = holder.adapterPosition
+
+            if (posicionActual == RecyclerView.NO_POSITION) {
+                return@setOnClickListener
+            }
+
+            onEditar(posicionActual)
         }
 
         holder.itemView.setOnLongClickListener {
-            onEliminar(position)
+
+            val posicionActual = holder.adapterPosition
+
+            if (posicionActual == RecyclerView.NO_POSITION) {
+                return@setOnLongClickListener true
+            }
+
+            onEliminar(posicionActual)
             true
         }
     }
+
+
 }
