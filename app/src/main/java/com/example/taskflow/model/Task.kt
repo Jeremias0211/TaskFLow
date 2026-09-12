@@ -1,7 +1,7 @@
 package com.example.taskflow.model
 
 data class Task(
-    var id: Int = 1,
+    var id: String = "",
     var title: String = "",
     var description: String = "",
     var category: String = "",

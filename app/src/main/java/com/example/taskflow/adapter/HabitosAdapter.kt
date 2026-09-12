@@ -14,7 +14,8 @@ import com.example.taskflow.model.Habito
 class HabitosAdapter(
     private val listaHabitos: MutableList<Habito>,
     private val onEliminar: (Int) -> Unit,
-    private val onEditar: (Int) -> Unit
+    private val onEditar: (Int) -> Unit,
+    private val onDiaCambiado: (Int, Int, Boolean) -> Unit = { _, _, _ -> }
 ) : RecyclerView.Adapter<HabitosAdapter.HabitoViewHolder>() {
 
     class HabitoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,7 +40,11 @@ class HabitosAdapter(
         return racha
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitoViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): HabitoViewHolder {
+
         val vista = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_habito, parent, false)
 
@@ -50,7 +55,10 @@ class HabitosAdapter(
         return listaHabitos.size
     }
 
-    override fun onBindViewHolder(holder: HabitoViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: HabitoViewHolder,
+        position: Int
+    ) {
 
         val habito = listaHabitos[position]
 
@@ -58,10 +66,10 @@ class HabitosAdapter(
 
         holder.progreso.progress = diasCompletados
         holder.textoProgreso.text = "$diasCompletados / 31 días"
-
         holder.nombre.text = habito.nombre
 
         val racha = calcularRacha(habito.dias)
+
         holder.racha.text = "🔥 Racha actual: $racha días"
 
         holder.gridDias.removeAllViews()
@@ -92,24 +100,34 @@ class HabitosAdapter(
 
             dia.setOnClickListener {
 
-                habito.dias[i] = !habito.dias[i]
+                val posicionActual = holder.bindingAdapterPosition
 
-                notifyItemChanged(position)
+                if (posicionActual == RecyclerView.NO_POSITION) {
+                    return@setOnClickListener
+                }
+
+                val nuevoEstado = !habito.dias[i]
+
+                habito.dias[i] = nuevoEstado
+
+                notifyItemChanged(posicionActual)
+
+                onDiaCambiado(
+                    posicionActual,
+                    i,
+                    nuevoEstado
+                )
             }
 
             holder.gridDias.addView(dia)
         }
 
-        // Tocar el nombre para editar
         holder.nombre.setOnClickListener {
             onEditar(position)
         }
 
-        // Mantener presionado para eliminar
         holder.itemView.setOnLongClickListener {
-
             onEliminar(position)
-
             true
         }
     }

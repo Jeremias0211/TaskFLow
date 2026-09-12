@@ -12,7 +12,7 @@
         android:id="@+id/tvNombreHabito"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="📚 Leer"
+        android:text=""
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="#39FF14"/>
@@ -25,6 +25,7 @@
         android:columnCount="7">
 
     </GridLayout>
+
     <ProgressBar
         android:id="@+id/progresoHabito"
         style="?android:attr/progressBarStyleHorizontal"
@@ -42,6 +43,7 @@
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:layout_marginTop="8dp"/>
+
     <TextView
         android:id="@+id/tvRacha"
         android:layout_width="wrap_content"
