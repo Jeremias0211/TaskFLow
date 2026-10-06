@@ -1,6 +1,7 @@
 package com.example.taskflow
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -10,13 +11,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskflow.adapter.HabitosAdapter
 import com.example.taskflow.model.Habito
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Calendar
 
 class HabitosActivity : AppCompatActivity() {
 
     private lateinit var recyclerHabitos: RecyclerView
     private lateinit var btnAgregarHabito: Button
+    private lateinit var bottomNavigation: BottomNavigationView
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
@@ -29,13 +33,24 @@ class HabitosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        auth = FirebaseAuth.getInstance()
+        val usuario = auth.currentUser
+
+        if (usuario == null) {
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_habitos)
 
-        auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
         recyclerHabitos = findViewById(R.id.recyclerHabitos)
         btnAgregarHabito = findViewById(R.id.btnAgregarHabito)
+        bottomNavigation = findViewById(R.id.bottomNavigation)
 
         recyclerHabitos.layoutManager = LinearLayoutManager(this)
 
@@ -62,6 +77,7 @@ class HabitosActivity : AppCompatActivity() {
         }
 
         cargarHabitos()
+        setupBottomNavigation(bottomNavigation, R.id.nav_habitos)
     }
 
     private fun cargarHabitos() {
@@ -69,15 +85,12 @@ class HabitosActivity : AppCompatActivity() {
         val usuario = auth.currentUser
 
         if (usuario == null) {
-            Toast.makeText(
-                this,
-                "No hay ningún usuario iniciado",
-                Toast.LENGTH_SHORT
-            ).show()
             return
         }
 
         val uid = usuario.uid
+        val calendar = Calendar.getInstance()
+        val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
 
         db.collection("usuarios")
             .document(uid)
@@ -96,11 +109,10 @@ class HabitosActivity : AppCompatActivity() {
                     val datosDias =
                         documento.get("dias") as? List<*>
 
-                    val dias = MutableList(31) { false }
+                    val dias = MutableList(daysInMonth) { false }
 
                     if (datosDias != null) {
-
-                        for (i in 0 until minOf(datosDias.size, 31)) {
+                        for (i in 0 until minOf(datosDias.size, daysInMonth)) {
                             dias[i] = datosDias[i] as? Boolean ?: false
                         }
                     }
@@ -131,6 +143,8 @@ class HabitosActivity : AppCompatActivity() {
 
         val editText = EditText(this)
         editText.hint = "Nombre del hábito"
+        editText.setTextColor(android.graphics.Color.WHITE)
+        editText.setHintTextColor(android.graphics.Color.GRAY)
 
         val iconos = arrayOf(
             "📚",
@@ -165,29 +179,35 @@ class HabitosActivity : AppCompatActivity() {
         icono: String
     ) {
 
-        AlertDialog.Builder(this)
+        val dialogo = AlertDialog.Builder(this)
             .setTitle("Nombre del hábito")
             .setView(editText)
-            .setPositiveButton("Agregar") { _, _ ->
+            .setPositiveButton("Agregar", null)
+            .setNegativeButton("Cancelar", null)
+            .create()
 
-                val nombre =
-                    editText.text.toString().trim()
+        dialogo.setOnShowListener {
+            dialogo.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val nombre = editText.text.toString().trim()
 
                 if (nombre.isEmpty()) {
+                    editText.error = "Ingresá un nombre"
                     Toast.makeText(
                         this,
                         "Ingresá un nombre",
                         Toast.LENGTH_SHORT
                     ).show()
-                    return@setPositiveButton
+                    return@setOnClickListener
                 }
 
                 agregarHabitoFirestore(
                     "$icono $nombre"
                 )
+                dialogo.dismiss()
             }
-            .setNegativeButton("Cancelar", null)
-            .show()
+        }
+
+        dialogo.show()
     }
 
     private fun agregarHabitoFirestore(
@@ -197,16 +217,13 @@ class HabitosActivity : AppCompatActivity() {
         val usuario = auth.currentUser
 
         if (usuario == null) {
-            Toast.makeText(
-                this,
-                "No hay ningún usuario iniciado",
-                Toast.LENGTH_SHORT
-            ).show()
             return
         }
 
         val uid = usuario.uid
-        val dias = MutableList(31) { false }
+        val calendar = Calendar.getInstance()
+        val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val dias = MutableList(daysInMonth) { false }
 
         val habito = hashMapOf(
             "nombre" to nombre,
@@ -304,22 +321,29 @@ class HabitosActivity : AppCompatActivity() {
         editText.setText(
             quitarIcono(habito.nombre)
         )
+        editText.setTextColor(android.graphics.Color.WHITE)
+        editText.setHintTextColor(android.graphics.Color.GRAY)
 
-        AlertDialog.Builder(this)
+        val dialogo = AlertDialog.Builder(this)
             .setTitle("Editar hábito")
             .setView(editText)
-            .setPositiveButton("Guardar") { _, _ ->
+            .setPositiveButton("Guardar", null)
+            .setNegativeButton("Cancelar", null)
+            .create()
 
+        dialogo.setOnShowListener {
+            dialogo.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                 val nuevoNombre =
                     editText.text.toString().trim()
 
                 if (nuevoNombre.isEmpty()) {
+                    editText.error = "Ingresá un nombre"
                     Toast.makeText(
                         this,
                         "Ingresá un nombre",
                         Toast.LENGTH_SHORT
                     ).show()
-                    return@setPositiveButton
+                    return@setOnClickListener
                 }
 
                 val icono =
@@ -329,9 +353,11 @@ class HabitosActivity : AppCompatActivity() {
                     posicion,
                     "$icono $nuevoNombre"
                 )
+                dialogo.dismiss()
             }
-            .setNegativeButton("Cancelar", null)
-            .show()
+        }
+
+        dialogo.show()
     }
 
     private fun actualizarHabito(
@@ -496,5 +522,26 @@ class HabitosActivity : AppCompatActivity() {
         }
 
         return nombre
+    }
+
+    private fun setupBottomNavigation(bottomNavigation: BottomNavigationView, currentItemId: Int) {
+        bottomNavigation.selectedItemId = currentItemId
+        bottomNavigation.setOnItemSelectedListener { item ->
+            if (item.itemId == currentItemId) {
+                return@setOnItemSelectedListener true
+            }
+            val intent = when (item.itemId) {
+                R.id.nav_home -> Intent(this, DashboardActivity::class.java)
+                R.id.nav_kanban -> Intent(this, KanbanActivity::class.java)
+                R.id.nav_create -> Intent(this, CreateTaskActivity::class.java)
+                R.id.nav_habitos -> Intent(this, HabitosActivity::class.java)
+                R.id.nav_profile -> Intent(this, ProfileActivity::class.java)
+                else -> return@setOnItemSelectedListener false
+            }
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+            finish()
+            true
+        }
     }
 }

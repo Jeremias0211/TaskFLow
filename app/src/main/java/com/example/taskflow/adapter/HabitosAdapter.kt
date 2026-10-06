@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskflow.R
 import com.example.taskflow.model.Habito
+import java.util.Calendar
 
 class HabitosAdapter(
     private val listaHabitos: MutableList<Habito>,
@@ -17,7 +18,6 @@ class HabitosAdapter(
     private val onEditar: (Int) -> Unit,
     private val onDiaCambiado: (Int, Int, Boolean) -> Unit = { _, _, _ -> }
 ) : RecyclerView.Adapter<HabitosAdapter.HabitoViewHolder>() {
-
 
     class HabitoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nombre: TextView = itemView.findViewById(R.id.tvNombreHabito)
@@ -28,16 +28,22 @@ class HabitosAdapter(
     }
 
     private fun calcularRacha(dias: List<Boolean>): Int {
+        val calendar = Calendar.getInstance()
+        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
         var racha = 0
+        var checkIndex = (currentDay - 1).coerceIn(0, dias.size - 1)
 
-        for (i in dias.indices.reversed()) {
-            if (dias[i]) {
+        if (checkIndex in dias.indices && !dias[checkIndex] && checkIndex > 0) {
+            checkIndex--
+        }
+
+        for (i in checkIndex downTo 0) {
+            if (i in dias.indices && dias[i]) {
                 racha++
             } else {
                 break
             }
         }
-
         return racha
     }
 
@@ -45,10 +51,8 @@ class HabitosAdapter(
         parent: ViewGroup,
         viewType: Int
     ): HabitoViewHolder {
-
         val vista = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_habito, parent, false)
-
         return HabitoViewHolder(vista)
     }
 
@@ -60,23 +64,32 @@ class HabitosAdapter(
         holder: HabitoViewHolder,
         position: Int
     ) {
-
         val habito = listaHabitos[position]
+        val calendar = Calendar.getInstance()
+        val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+
+        while (habito.dias.size < daysInMonth) {
+            habito.dias.add(false)
+        }
+        if (habito.dias.size > daysInMonth) {
+            while (habito.dias.size > daysInMonth) {
+                habito.dias.removeAt(habito.dias.size - 1)
+            }
+        }
 
         val diasCompletados = habito.dias.count { it }
 
+        holder.progreso.max = daysInMonth
         holder.progreso.progress = diasCompletados
-        holder.textoProgreso.text = "$diasCompletados / 31 días"
+        holder.textoProgreso.text = "$diasCompletados / $daysInMonth días"
         holder.nombre.text = habito.nombre
 
         val racha = calcularRacha(habito.dias)
-
         holder.racha.text = "🔥 Racha actual: $racha días"
 
         holder.gridDias.removeAllViews()
 
         for (i in habito.dias.indices) {
-
             val dia = TextView(holder.itemView.context)
 
             dia.text = (i + 1).toString()
@@ -100,17 +113,13 @@ class HabitosAdapter(
             }
 
             dia.setOnClickListener {
-
                 val posicionActual = holder.adapterPosition
-
                 if (posicionActual == RecyclerView.NO_POSITION) {
                     return@setOnClickListener
                 }
 
                 val nuevoEstado = !habito.dias[i]
-
                 habito.dias[i] = nuevoEstado
-
                 notifyItemChanged(posicionActual)
 
                 onDiaCambiado(
@@ -124,28 +133,20 @@ class HabitosAdapter(
         }
 
         holder.nombre.setOnClickListener {
-
             val posicionActual = holder.adapterPosition
-
             if (posicionActual == RecyclerView.NO_POSITION) {
                 return@setOnClickListener
             }
-
             onEditar(posicionActual)
         }
 
         holder.itemView.setOnLongClickListener {
-
             val posicionActual = holder.adapterPosition
-
             if (posicionActual == RecyclerView.NO_POSITION) {
                 return@setOnLongClickListener true
             }
-
             onEliminar(posicionActual)
             true
         }
     }
-
-
 }

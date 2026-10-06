@@ -1,5 +1,6 @@
 package com.example.taskflow
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,12 +27,13 @@ class LoginActivity : AppCompatActivity() {
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
         val tvRegister = findViewById<TextView>(R.id.tvRegister)
+        val tvForgotPassword = findViewById<TextView>(R.id.tvForgotPassword)
 
         // Si ya hay una sesión iniciada, entra directamente
         if (auth.currentUser != null) {
-            startActivity(
-                Intent(this, DashboardActivity::class.java)
-            )
+            val intent = Intent(this, DashboardActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
             finish()
             return
         }
@@ -71,10 +73,9 @@ class LoginActivity : AppCompatActivity() {
                             R.drawable.check
                         )
 
-                        startActivity(
-                            Intent(this, DashboardActivity::class.java)
-                        )
-
+                        val intent = Intent(this, DashboardActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
                         finish()
 
                     } else {
@@ -88,6 +89,37 @@ class LoginActivity : AppCompatActivity() {
                 }
         }
 
+        // Recuperación de contraseña
+        tvForgotPassword.setOnClickListener {
+            val emailInput = EditText(this)
+            emailInput.hint = "Correo electrónico"
+            emailInput.setText(etEmail.text.toString().trim())
+            emailInput.setTextColor(android.graphics.Color.WHITE)
+            emailInput.setHintTextColor(android.graphics.Color.GRAY)
+
+            AlertDialog.Builder(this)
+                .setTitle("Recuperar contraseña")
+                .setMessage("Ingresá tu correo electrónico para recibir las instrucciones:")
+                .setView(emailInput)
+                .setPositiveButton("Enviar") { _, _ ->
+                    val email = emailInput.text.toString().trim()
+                    if (email.isEmpty()) {
+                        Toast.makeText(this, "Ingresá un correo válido", Toast.LENGTH_SHORT).show()
+                        return@setPositiveButton
+                    }
+
+                    auth.sendPasswordResetEmail(email)
+                        .addOnSuccessListener {
+                            mostrarMensaje("Correo de recuperación enviado", R.drawable.check)
+                        }
+                        .addOnFailureListener { e ->
+                            mostrarMensaje(e.localizedMessage ?: "Error al enviar correo", R.drawable.error)
+                        }
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
+
         // Ir al registro
         tvRegister.setOnClickListener {
 
@@ -98,13 +130,21 @@ class LoginActivity : AppCompatActivity() {
     }
 
     // Toast personalizado con imagen
-    private fun mostrarMensaje(mensaje: String, imagen: Int) {
+    private fun mostrarMensaje(
+        mensaje: String,
+        imagen: Int
+    ) {
 
         val vista = LayoutInflater.from(this)
             .inflate(R.layout.toast_custom, null)
 
-        val icono = vista.findViewById<ImageView>(R.id.toastIcon)
-        val texto = vista.findViewById<TextView>(R.id.toastText)
+        val icono = vista.findViewById<ImageView>(
+            R.id.toastIcon
+        )
+
+        val texto = vista.findViewById<TextView>(
+            R.id.toastText
+        )
 
         icono.setImageResource(imagen)
         texto.text = mensaje

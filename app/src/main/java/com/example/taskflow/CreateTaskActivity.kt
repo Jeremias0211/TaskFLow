@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -19,9 +20,19 @@ class CreateTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        auth = FirebaseAuth.getInstance()
+        val usuario = auth.currentUser
+
+        if (usuario == null) {
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_create_task)
 
-        auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
         val etTitle = findViewById<EditText>(R.id.etTitle)
@@ -32,6 +43,7 @@ class CreateTaskActivity : AppCompatActivity() {
         val spStatus = findViewById<Spinner>(R.id.spStatus)
 
         val btnSaveTask = findViewById<Button>(R.id.btnSaveTask)
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
         val priorities = arrayOf(
             "Alta",
@@ -75,18 +87,6 @@ class CreateTaskActivity : AppCompatActivity() {
             if (category.isEmpty()) {
                 etCategory.error = "Ingresá una categoría"
                 etCategory.requestFocus()
-                return@setOnClickListener
-            }
-
-            val usuario = auth.currentUser
-
-            if (usuario == null) {
-                Toast.makeText(
-                    this,
-                    "No hay ningún usuario iniciado",
-                    Toast.LENGTH_SHORT
-                ).show()
-
                 return@setOnClickListener
             }
 
@@ -147,6 +147,29 @@ class CreateTaskActivity : AppCompatActivity() {
                         Toast.LENGTH_LONG
                     ).show()
                 }
+        }
+
+        setupBottomNavigation(bottomNavigation, R.id.nav_create)
+    }
+
+    private fun setupBottomNavigation(bottomNavigation: BottomNavigationView, currentItemId: Int) {
+        bottomNavigation.selectedItemId = currentItemId
+        bottomNavigation.setOnItemSelectedListener { item ->
+            if (item.itemId == currentItemId) {
+                return@setOnItemSelectedListener true
+            }
+            val intent = when (item.itemId) {
+                R.id.nav_home -> Intent(this, DashboardActivity::class.java)
+                R.id.nav_kanban -> Intent(this, KanbanActivity::class.java)
+                R.id.nav_create -> Intent(this, CreateTaskActivity::class.java)
+                R.id.nav_habitos -> Intent(this, HabitosActivity::class.java)
+                R.id.nav_profile -> Intent(this, ProfileActivity::class.java)
+                else -> return@setOnItemSelectedListener false
+            }
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+            finish()
+            true
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.taskflow
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -13,11 +14,11 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class KanbanActivity : AppCompatActivity() {
-
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
@@ -25,20 +26,33 @@ class KanbanActivity : AppCompatActivity() {
     private lateinit var layoutPending: LinearLayout
     private lateinit var layoutProgress: LinearLayout
     private lateinit var layoutCompleted: LinearLayout
+    private lateinit var bottomNavigation: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        auth = FirebaseAuth.getInstance()
+        val usuario = auth.currentUser
+
+        if (usuario == null) {
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_kanban)
 
-        auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
         layoutPending = findViewById(R.id.layoutPending)
         layoutProgress = findViewById(R.id.layoutProgress)
         layoutCompleted = findViewById(R.id.layoutCompleted)
+        bottomNavigation = findViewById(R.id.bottomNavigation)
 
         cargarTareas()
+        setupBottomNavigation(bottomNavigation, R.id.nav_kanban)
     }
 
     private fun cargarTareas() {
@@ -46,11 +60,6 @@ class KanbanActivity : AppCompatActivity() {
         val usuario = auth.currentUser
 
         if (usuario == null) {
-            Toast.makeText(
-                this,
-                "No hay ningún usuario iniciado",
-                Toast.LENGTH_SHORT
-            ).show()
             return
         }
 
@@ -254,14 +263,20 @@ class KanbanActivity : AppCompatActivity() {
         val etTitle = EditText(this)
         etTitle.hint = "Título"
         etTitle.setText(tarea.title)
+        etTitle.setTextColor(Color.WHITE)
+        etTitle.setHintTextColor(Color.GRAY)
 
         val etDescription = EditText(this)
         etDescription.hint = "Descripción"
         etDescription.setText(tarea.description)
+        etDescription.setTextColor(Color.WHITE)
+        etDescription.setHintTextColor(Color.GRAY)
 
         val etCategory = EditText(this)
         etCategory.hint = "Categoría"
         etCategory.setText(tarea.category)
+        etCategory.setTextColor(Color.WHITE)
+        etCategory.setHintTextColor(Color.GRAY)
 
         val spPriority = Spinner(this)
 
@@ -434,11 +449,6 @@ class KanbanActivity : AppCompatActivity() {
         val usuario = auth.currentUser
 
         if (usuario == null) {
-            Toast.makeText(
-                this,
-                "No hay ningún usuario iniciado",
-                Toast.LENGTH_SHORT
-            ).show()
             return
         }
 
@@ -501,6 +511,27 @@ class KanbanActivity : AppCompatActivity() {
         contenedor.addView(mensaje)
     }
 
+    private fun setupBottomNavigation(bottomNavigation: BottomNavigationView, currentItemId: Int) {
+        bottomNavigation.selectedItemId = currentItemId
+        bottomNavigation.setOnItemSelectedListener { item ->
+            if (item.itemId == currentItemId) {
+                return@setOnItemSelectedListener true
+            }
+            val intent = when (item.itemId) {
+                R.id.nav_home -> Intent(this, DashboardActivity::class.java)
+                R.id.nav_kanban -> Intent(this, KanbanActivity::class.java)
+                R.id.nav_create -> Intent(this, CreateTaskActivity::class.java)
+                R.id.nav_habitos -> Intent(this, HabitosActivity::class.java)
+                R.id.nav_profile -> Intent(this, ProfileActivity::class.java)
+                else -> return@setOnItemSelectedListener false
+            }
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+            finish()
+            true
+        }
+    }
+
     data class TareaFirestore(
         val id: String,
         val title: String,
@@ -509,6 +540,4 @@ class KanbanActivity : AppCompatActivity() {
         val priority: Int,
         val status: String
     )
-
-
 }
