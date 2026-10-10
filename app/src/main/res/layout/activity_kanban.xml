@@ -4,118 +4,400 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#101010">
+    android:background="#0A0A0A">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TABLERO KANBAN"
-            android:textColor="#39FF14"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:gravity="center"/>
-
-        <!-- Pendiente -->
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="📌 PENDIENTE"
-            android:textColor="#39FF14"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:overScrollMode="never">
 
         <LinearLayout
-            android:id="@+id/layoutPending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/neon_background"
             android:orientation="vertical"
-            android:padding="12dp"
-            android:layout_marginTop="8dp">
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp">
 
-            <TextView
+            <!-- ENCABEZADO -->
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No hay tareas"
-                android:textColor="#FFFFFF"/>
-        </LinearLayout>
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:orientation="horizontal">
 
-        <!-- En progreso -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tablero"
+                    android:textColor="#FFFFFF"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="⚡ EN PROGRESO"
-            android:textColor="#39FF14"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center"
+                    android:background="@drawable/login_secondary_button"
+                    android:text="⌕"
+                    android:textColor="#E0E0E0"
+                    android:textSize="28sp" />
 
-        <LinearLayout
-            android:id="@+id/layoutProgress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/neon_background"
-            android:orientation="vertical"
-            android:padding="12dp"
-            android:layout_marginTop="8dp">
+                <TextView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:gravity="center"
+                    android:background="@drawable/login_secondary_button"
+                    android:text="☷"
+                    android:textColor="#E0E0E0"
+                    android:textSize="23sp" />
 
-            <TextView
+            </LinearLayout>
+
+            <!-- FILTROS DE ESTADO -->
+
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No hay tareas"
-                android:textColor="#FFFFFF"/>
-        </LinearLayout>
+                android:layout_marginTop="20dp"
+                android:scrollbars="none"
+                android:overScrollMode="never">
 
-        <!-- Completado -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="✅ COMPLETADO"
-            android:textColor="#39FF14"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:gravity="center"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:background="@drawable/login_logo_background"
+                        android:text="Pendientes"
+                        android:textColor="#39FF14"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-        <LinearLayout
-            android:id="@+id/layoutCompleted"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/neon_background"
-            android:orientation="vertical"
-            android:padding="12dp"
-            android:layout_marginTop="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="10dp"
+                        android:gravity="center"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:background="@drawable/login_secondary_button"
+                        android:text="En progreso"
+                        android:textColor="#8A8A8A"
+                        android:textSize="14sp" />
 
-            <TextView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="10dp"
+                        android:gravity="center"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:background="@drawable/login_secondary_button"
+                        android:text="Completadas"
+                        android:textColor="#8A8A8A"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- CABECERA DE COLUMNAS -->
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No hay tareas"
-                android:textColor="#FFFFFF"/>
-        </LinearLayout>
+                android:layout_marginTop="26dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-    </LinearLayout>
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="#FFFFFF" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Pendientes"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="•"
+                    android:textColor="#8A8A8A"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="#39FF14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="En progreso"
+                    android:textColor="#8A8A8A"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <!-- TABLERO HORIZONTAL -->
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:scrollbars="none"
+                android:overScrollMode="never"
+                android:clipToPadding="false">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp">
+
+                    <!-- COLUMNA PENDIENTES -->
+
+                    <LinearLayout
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp"
+                        android:background="#151515">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="PENDIENTES"
+                                android:textColor="#FFFFFF"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.06" />
+
+                            <TextView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:gravity="center"
+                                android:background="@drawable/login_secondary_button"
+                                android:text="+"
+                                android:textColor="#BDBDBD"
+                                android:textSize="22sp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="14dp"
+                            android:background="#2A2A2A" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutPending"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="14dp"
+                                android:text="No hay tareas"
+                                android:textColor="#8C8C8C"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- COLUMNA EN PROGRESO -->
+
+                    <LinearLayout
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:orientation="vertical"
+                        android:padding="14dp"
+                        android:background="#151515">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="8dp"
+                                android:layout_height="8dp"
+                                android:background="#39FF14" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="8dp"
+                                android:text="EN PROGRESO"
+                                android:textColor="#FFFFFF"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.04" />
+
+                            <TextView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:gravity="center"
+                                android:background="@drawable/login_secondary_button"
+                                android:text="+"
+                                android:textColor="#BDBDBD"
+                                android:textSize="22sp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="14dp"
+                            android:background="#2A2A2A" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutProgress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="14dp"
+                                android:text="No hay tareas"
+                                android:textColor="#8C8C8C"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- COLUMNA COMPLETADAS -->
+
+                    <LinearLayout
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:orientation="vertical"
+                        android:padding="14dp"
+                        android:background="#151515">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="8dp"
+                                android:layout_height="8dp"
+                                android:background="#666666" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="8dp"
+                                android:text="COMPLETADAS"
+                                android:textColor="#FFFFFF"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.04" />
+
+                            <TextView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:gravity="center"
+                                android:background="@drawable/login_secondary_button"
+                                android:text="+"
+                                android:textColor="#BDBDBD"
+                                android:textSize="22sp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="14dp"
+                            android:background="#2A2A2A" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutCompleted"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="14dp"
+                                android:text="No hay tareas"
+                                android:textColor="#8C8C8C"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+        </LinearLayout>
 
     </ScrollView>
+
+    <!-- NAVEGACIÓN INFERIOR EXISTENTE -->
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#181818"
+        android:background="#121212"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:menu="@menu/bottom_nav_menu" />

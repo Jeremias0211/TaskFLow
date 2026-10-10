@@ -5,59 +5,531 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#000000"
+    android:background="#0A0A0A"
     tools:context=".HabitosActivity">
 
+    <!-- Contenido principal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="8dp">
 
-    <TextView
-        android:id="@+id/tituloHabitos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Seguimiento de Hábitos"
-        android:textColor="#39FF14"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:layout_gravity="center"/>
+        <!-- Encabezado -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Marca cada día que cumplas tu hábito."
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp"
-        android:layout_gravity="center"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnAgregarHabito"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="+ Agregar hábito"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#39FF14"
-        android:textColor="#000000"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TASKFLOW / CONSTANCIA"
+                    android:textColor="#39FF14"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.12" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerHabitos"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="20dp"/>
+                <TextView
+                    android:id="@+id/tituloHabitos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Hábitos"
+                    android:textColor="#FFFFFF"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btnCalendarioHabitos"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/habito_icon_background"
+                android:gravity="center"
+                android:text="▦"
+                android:textColor="#FFFFFF"
+                android:textSize="23sp"
+                android:contentDescription="Calendario" />
+
+            <TextView
+                android:id="@+id/btnOpcionesHabitos"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/habito_icon_background"
+                android:gravity="center"
+                android:text="⋮"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp"
+                android:contentDescription="Opciones de hábitos" />
+
+        </LinearLayout>
+
+        <!-- Selector semanal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:background="@drawable/habito_summary_background">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Esta semana"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSemanaHabitos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Seleccioná un día"
+                    android:textColor="#8C8C8C"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/diaColumna1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/habito_day_background"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvNombreDia1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="L"
+                        android:textColor="#8C8C8C"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tvNumeroDia1"
+                        android:layout_width="34dp"
+                        android:layout_height="36dp"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPuntoDia1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:text="•"
+                        android:textColor="#39FF14"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/diaColumna2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/habito_day_background"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvNombreDia2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="M"
+                        android:textColor="#8C8C8C"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tvNumeroDia2"
+                        android:layout_width="34dp"
+                        android:layout_height="36dp"
+                        android:gravity="center"
+                        android:text="2"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPuntoDia2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:text="•"
+                        android:textColor="#39FF14"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/diaColumna3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/habito_day_background"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvNombreDia3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="X"
+                        android:textColor="#8C8C8C"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tvNumeroDia3"
+                        android:layout_width="34dp"
+                        android:layout_height="36dp"
+                        android:gravity="center"
+                        android:text="3"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPuntoDia3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:text="•"
+                        android:textColor="#39FF14"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/diaColumna4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/habito_day_background"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvNombreDia4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="J"
+                        android:textColor="#8C8C8C"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tvNumeroDia4"
+                        android:layout_width="34dp"
+                        android:layout_height="36dp"
+                        android:gravity="center"
+                        android:text="4"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPuntoDia4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:text="•"
+                        android:textColor="#39FF14"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/diaColumna5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/habito_day_background"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvNombreDia5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="V"
+                        android:textColor="#8C8C8C"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tvNumeroDia5"
+                        android:layout_width="34dp"
+                        android:layout_height="36dp"
+                        android:gravity="center"
+                        android:text="5"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPuntoDia5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:text="•"
+                        android:textColor="#39FF14"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/diaColumna6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/habito_day_background"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvNombreDia6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="S"
+                        android:textColor="#8C8C8C"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tvNumeroDia6"
+                        android:layout_width="34dp"
+                        android:layout_height="36dp"
+                        android:gravity="center"
+                        android:text="6"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPuntoDia6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:text="•"
+                        android:textColor="#39FF14"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/diaColumna7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/habito_day_background"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvNombreDia7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="D"
+                        android:textColor="#8C8C8C"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tvNumeroDia7"
+                        android:layout_width="34dp"
+                        android:layout_height="36dp"
+                        android:gravity="center"
+                        android:text="7"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPuntoDia7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:text="•"
+                        android:textColor="#39FF14"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Resumen -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="94dp"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:padding="14dp"
+                android:background="@drawable/habito_summary_background">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔥  Racha"
+                    android:textColor="#B8B8B8"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvRachaGeneral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="0 días"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:padding="14dp"
+                android:background="@drawable/habito_summary_background">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Progreso de hoy"
+                    android:id="@+id/tvEtiquetaProgreso"
+                    android:textColor="#B8B8B8"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvProgresoGeneral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="0 / 0"
+                    android:textColor="#39FF14"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Título de la lista -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Mis hábitos"
+                android:textColor="#FFFFFF"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnAgregarHabito"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:text="+ Agregar"
+                android:textAllCaps="false"
+                android:textColor="#0A0A0A"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:background="@drawable/login_button_background" />
+
+        </LinearLayout>
+
+        <!-- Lista real de hábitos cargados desde Firebase -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerHabitos"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="12dp"
+            android:clipToPadding="false"
+            android:paddingBottom="8dp"
+            tools:listitem="@layout/item_habito" />
 
     </LinearLayout>
 
+    <!-- Navegación inferior existente -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#181818"
+        android:background="#141414"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:menu="@menu/bottom_nav_menu" />

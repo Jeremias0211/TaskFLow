@@ -4,95 +4,386 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#101010">
+    android:background="#0A0A0A">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:overScrollMode="never">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="NUEVA TAREA"
-            android:textColor="#39FF14"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:gravity="center"/>
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="24dp">
 
-        <EditText
-            android:id="@+id/etTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/neon_background"
-            android:hint="Título"
-            android:textColorHint="#6D6D6D"
-            android:textColor="#FFFFFF"
-            android:padding="14dp"/>
+            <!-- ENCABEZADO -->
 
-        <EditText
-            android:id="@+id/etDescription"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/neon_background"
-            android:gravity="top"
-            android:hint="Descripción"
-            android:textColorHint="#6D6D6D"
-            android:textColor="#FFFFFF"
-            android:padding="14dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/etCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/neon_background"
-            android:hint="Categoría"
-            android:textColorHint="#6D6D6D"
-            android:textColor="#FFFFFF"
-            android:padding="14dp"/>
+                <TextView
+                    android:id="@+id/btnClose"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/login_secondary_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="✕"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:contentDescription="Cerrar" />
 
-        <Spinner
-            android:id="@+id/spPriority"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/neon_background"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Nueva tarea"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-        <Spinner
-            android:id="@+id/spStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/neon_background"/>
+                <TextView
+                    android:id="@+id/btnClear"
+                    android:layout_width="60dp"
+                    android:layout_height="44dp"
+                    android:gravity="center"
+                    android:text="Borrar"
+                    android:textColor="#BDBDBD"
+                    android:textSize="14sp"
+                    android:clickable="true"
+                    android:focusable="true" />
 
-        <Button
-            android:id="@+id/btnSaveTask"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#39FF14"
-            android:text="💾 GUARDAR TAREA"
-            android:textColor="#000000"
-            android:textStyle="bold"/>
+            </LinearLayout>
 
-    </LinearLayout>
+            <!-- TÍTULO -->
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Título"
+                android:textColor="#BDBDBD"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etTitle"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/login_input_background"
+                android:hint="Preparar presentación final"
+                android:inputType="textCapSentences"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:singleLine="true"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:textSize="15sp" />
+
+            <!-- DESCRIPCIÓN -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Descripción"
+                android:textColor="#BDBDBD"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/login_input_background"
+                android:gravity="top|start"
+                android:hint="Armar las diapositivas y ensayar la demo con el equipo."
+                android:inputType="textCapSentences|textMultiLine"
+                android:padding="16dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:textSize="14sp" />
+
+            <!-- CATEGORÍA -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="Categoría"
+                android:textColor="#BDBDBD"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/chipWork"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/task_chip_active"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="●  Trabajo"
+                    android:textColor="#39FF14"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/chipStudy"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/login_secondary_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="Estudio"
+                    android:textColor="#BDBDBD"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/chipPersonal"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/login_secondary_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="Personal"
+                    android:textColor="#BDBDBD"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <!-- PRIORIDAD -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="Prioridad"
+                android:textColor="#BDBDBD"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/btnPriorityLow"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/login_secondary_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="⚑  Baja"
+                    android:textColor="#BDBDBD"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/btnPriorityMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/login_secondary_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="⚑  Media"
+                    android:textColor="#BDBDBD"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/btnPriorityHigh"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/task_chip_active"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="⚑  Alta"
+                    android:textColor="#39FF14"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- ESTADO -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="Estado"
+                android:textColor="#BDBDBD"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/statusContainer"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="10dp"
+                android:background="#141414"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/btnStatusPending"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/task_chip_active"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="Pendiente"
+                    android:textColor="#39FF14"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btnStatusProgress"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="En progreso"
+                    android:textColor="#8C8C8C"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/btnStatusCompleted"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="Completada"
+                    android:textColor="#8C8C8C"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <!-- FECHA LÍMITE -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="Fecha límite (opcional)"
+                android:textColor="#BDBDBD"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/btnDeadline"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_input_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <TextView
+                    android:layout_width="28dp"
+                    android:layout_height="wrap_content"
+                    android:text="▦"
+                    android:textColor="#39FF14"
+                    android:textSize="21sp" />
+
+                <TextView
+                    android:id="@+id/tvDeadlineValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Elegir fecha y hora"
+                    android:textColor="#BDBDBD"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="›"
+                    android:textColor="#8C8C8C"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
     </ScrollView>
+
+    <!-- ACCIÓN PRINCIPAL FIJA -->
+
+    <Button
+        android:id="@+id/btnSaveTask"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/login_button_background"
+        android:stateListAnimator="@null"
+        android:text="✓  Guardar tarea"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- SE CONSERVA LA NAVEGACIÓN EXISTENTE -->
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#181818"
+        android:background="#141414"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:menu="@menu/bottom_nav_menu" />

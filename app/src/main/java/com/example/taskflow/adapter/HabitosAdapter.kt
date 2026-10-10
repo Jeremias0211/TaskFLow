@@ -1,9 +1,12 @@
 package com.example.taskflow.adapter
 
 import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.GridLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -19,26 +22,37 @@ class HabitosAdapter(
     private val onDiaCambiado: (Int, Int, Boolean) -> Unit = { _, _, _ -> }
 ) : RecyclerView.Adapter<HabitosAdapter.HabitoViewHolder>() {
 
+    private var diaSeleccionado: Int = Calendar.getInstance()
+        .get(Calendar.DAY_OF_MONTH) - 1
+
     class HabitoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nombre: TextView = itemView.findViewById(R.id.tvNombreHabito)
         val racha: TextView = itemView.findViewById(R.id.tvRacha)
         val gridDias: GridLayout = itemView.findViewById(R.id.gridDias)
         val progreso: ProgressBar = itemView.findViewById(R.id.progresoHabito)
         val textoProgreso: TextView = itemView.findViewById(R.id.tvProgreso)
+        val checkHabito: CheckBox = itemView.findViewById(R.id.checkHabitoHoy)
+        val icono: TextView = itemView.findViewById(R.id.tvIconoHabito)
+    }
+
+    fun seleccionarDia(diaDelMes: Int) {
+        diaSeleccionado = diaDelMes - 1
+        notifyDataSetChanged()
     }
 
     private fun calcularRacha(dias: List<Boolean>): Int {
-        val calendar = Calendar.getInstance()
-        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
-        var racha = 0
-        var checkIndex = (currentDay - 1).coerceIn(0, dias.size - 1)
+        if (dias.isEmpty()) return 0
 
-        if (checkIndex in dias.indices && !dias[checkIndex] && checkIndex > 0) {
-            checkIndex--
+        val hoy = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - 1
+        var indice = hoy.coerceIn(0, dias.lastIndex)
+
+        if (!dias[indice] && indice > 0) {
+            indice--
         }
 
-        for (i in checkIndex downTo 0) {
-            if (i in dias.indices && dias[i]) {
+        var racha = 0
+        for (i in indice downTo 0) {
+            if (dias[i]) {
                 racha++
             } else {
                 break
@@ -56,97 +70,76 @@ class HabitosAdapter(
         return HabitoViewHolder(vista)
     }
 
-    override fun getItemCount(): Int {
-        return listaHabitos.size
-    }
+    override fun getItemCount(): Int = listaHabitos.size
 
-    override fun onBindViewHolder(
-        holder: HabitoViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: HabitoViewHolder, position: Int) {
         val habito = listaHabitos[position]
         val calendar = Calendar.getInstance()
-        val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val diasDelMes = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
 
-        while (habito.dias.size < daysInMonth) {
+        while (habito.dias.size < diasDelMes) {
             habito.dias.add(false)
         }
-        if (habito.dias.size > daysInMonth) {
-            while (habito.dias.size > daysInMonth) {
-                habito.dias.removeAt(habito.dias.size - 1)
-            }
+        while (habito.dias.size > diasDelMes) {
+            habito.dias.removeAt(habito.dias.lastIndex)
         }
 
-        val diasCompletados = habito.dias.count { it }
-
-        holder.progreso.max = daysInMonth
-        holder.progreso.progress = diasCompletados
-        holder.textoProgreso.text = "$diasCompletados / $daysInMonth días"
-        holder.nombre.text = habito.nombre
+        val completados = habito.dias.count { it }
+        holder.nombre.text = quitarIcono(habito.nombre)
+        holder.icono.text = obtenerIcono(habito.nombre)
+        holder.progreso.max = diasDelMes
+        holder.progreso.progress = completados
+        holder.textoProgreso.text = "$completados / $diasDelMes días"
 
         val racha = calcularRacha(habito.dias)
         holder.racha.text = "🔥 Racha actual: $racha días"
 
-        holder.gridDias.removeAllViews()
+        val indiceDia = diaSeleccionado.coerceIn(0, habito.dias.lastIndex.coerceAtLeast(0))
+        holder.checkHabito.setOnCheckedChangeListener(null)
+        holder.checkHabito.isChecked =
+            habito.dias.isNotEmpty() && habito.dias[indiceDia]
 
-        for (i in habito.dias.indices) {
-            val dia = TextView(holder.itemView.context)
+        holder.checkHabito.setOnCheckedChangeListener { _, marcado ->
+            val posicionActual = holder.adapterPosition
+            if (posicionActual == RecyclerView.NO_POSITION) return@setOnCheckedChangeListener
 
-            dia.text = (i + 1).toString()
-            dia.textAlignment = View.TEXT_ALIGNMENT_CENTER
-            dia.textSize = 14f
-            dia.setPadding(10, 10, 10, 10)
+            val habitoActual = listaHabitos[posicionActual]
+            if (indiceDia !in habitoActual.dias.indices) return@setOnCheckedChangeListener
 
-            val params = GridLayout.LayoutParams()
-            params.width = 110
-            params.height = 110
-            params.setMargins(8, 8, 8, 8)
-
-            dia.layoutParams = params
-
-            if (habito.dias[i]) {
-                dia.setBackgroundResource(R.drawable.dia_completado)
-                dia.setTextColor(Color.BLACK)
-            } else {
-                dia.setBackgroundResource(R.drawable.dia_pendiente)
-                dia.setTextColor(Color.WHITE)
-            }
-
-            dia.setOnClickListener {
-                val posicionActual = holder.adapterPosition
-                if (posicionActual == RecyclerView.NO_POSITION) {
-                    return@setOnClickListener
-                }
-
-                val nuevoEstado = !habito.dias[i]
-                habito.dias[i] = nuevoEstado
+            if (habitoActual.dias[indiceDia] != marcado) {
+                habitoActual.dias[indiceDia] = marcado
                 notifyItemChanged(posicionActual)
-
-                onDiaCambiado(
-                    posicionActual,
-                    i,
-                    nuevoEstado
-                )
+                onDiaCambiado(posicionActual, indiceDia, marcado)
             }
-
-            holder.gridDias.addView(dia)
         }
 
         holder.nombre.setOnClickListener {
             val posicionActual = holder.adapterPosition
-            if (posicionActual == RecyclerView.NO_POSITION) {
-                return@setOnClickListener
+            if (posicionActual != RecyclerView.NO_POSITION) {
+                onEditar(posicionActual)
             }
-            onEditar(posicionActual)
         }
 
         holder.itemView.setOnLongClickListener {
             val posicionActual = holder.adapterPosition
-            if (posicionActual == RecyclerView.NO_POSITION) {
-                return@setOnLongClickListener true
+            if (posicionActual != RecyclerView.NO_POSITION) {
+                onEliminar(posicionActual)
             }
-            onEliminar(posicionActual)
             true
         }
+
+        holder.gridDias.removeAllViews()
+    }
+
+    private fun obtenerIcono(nombre: String): String {
+        val iconos = listOf("📚", "🏋", "💧", "😴", "🍎", "🚶", "🧘", "💻")
+        return iconos.firstOrNull { nombre.startsWith(it) } ?: "●"
+    }
+
+    private fun quitarIcono(nombre: String): String {
+        val iconos = listOf("📚", "🏋", "💧", "😴", "🍎", "🚶", "🧘", "💻")
+        return iconos.firstOrNull { nombre.startsWith(it) }
+            ?.let { nombre.removePrefix(it).trim() }
+            ?: nombre
     }
 }
