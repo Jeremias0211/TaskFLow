@@ -2,7 +2,10 @@ package com.example.taskflow
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -17,6 +20,12 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
+    private lateinit var vBar1: View
+    private lateinit var vBar2: View
+    private lateinit var vBar3: View
+    private lateinit var vBar4: View
+    private lateinit var tvSecurityStatus: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,6 +39,31 @@ class RegisterActivity : AppCompatActivity() {
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val etConfirmPassword = findViewById<EditText>(R.id.etConfirmPassword)
         val btnRegister = findViewById<Button>(R.id.btnRegister)
+        val tvBackToLogin = findViewById<TextView>(R.id.tvBackToLogin)
+        val tvLogin = findViewById<TextView>(R.id.tvLogin)
+
+        vBar1 = findViewById(R.id.vBar1)
+        vBar2 = findViewById(R.id.vBar2)
+        vBar3 = findViewById(R.id.vBar3)
+        vBar4 = findViewById(R.id.vBar4)
+        tvSecurityStatus = findViewById(R.id.tvSecurityStatus)
+
+        tvBackToLogin.setOnClickListener {
+            finish()
+        }
+
+        tvLogin.setOnClickListener {
+            finish()
+        }
+
+        // Validación en tiempo real de la seguridad de la contraseña
+        etPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                checkPasswordStrength(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         btnRegister.setOnClickListener {
 
@@ -129,11 +163,8 @@ class RegisterActivity : AppCompatActivity() {
                                         R.drawable.check
                                     )
 
-                                    // Cerrar sesión para que tenga
-                                    // que iniciar sesión manualmente
                                     auth.signOut()
 
-                                    // Volver al Login
                                     startActivity(
                                         Intent(
                                             this,
@@ -162,6 +193,54 @@ class RegisterActivity : AppCompatActivity() {
                         )
                     }
                 }
+        }
+    }
+
+    private fun checkPasswordStrength(password: String) {
+        val colorActive = android.graphics.Color.parseColor("#39FF14")
+        val colorInactive = android.graphics.Color.parseColor("#333333")
+
+        when {
+            password.isEmpty() -> {
+                vBar1.setBackgroundColor(colorInactive)
+                vBar2.setBackgroundColor(colorInactive)
+                vBar3.setBackgroundColor(colorInactive)
+                vBar4.setBackgroundColor(colorInactive)
+                tvSecurityStatus.text = "Seguridad: -"
+                tvSecurityStatus.setTextColor(android.graphics.Color.parseColor("#8C8C8C"))
+            }
+            password.length < 6 -> {
+                vBar1.setBackgroundColor(colorActive)
+                vBar2.setBackgroundColor(colorInactive)
+                vBar3.setBackgroundColor(colorInactive)
+                vBar4.setBackgroundColor(colorInactive)
+                tvSecurityStatus.text = "Seguridad: Débil (mín. 6 caracteres)"
+                tvSecurityStatus.setTextColor(colorActive)
+            }
+            password.length < 8 -> {
+                vBar1.setBackgroundColor(colorActive)
+                vBar2.setBackgroundColor(colorActive)
+                vBar3.setBackgroundColor(colorInactive)
+                vBar4.setBackgroundColor(colorInactive)
+                tvSecurityStatus.text = "Seguridad: Media"
+                tvSecurityStatus.setTextColor(colorActive)
+            }
+            password.length >= 8 && password.any { it.isDigit() } && password.any { it.isUpperCase() } -> {
+                vBar1.setBackgroundColor(colorActive)
+                vBar2.setBackgroundColor(colorActive)
+                vBar3.setBackgroundColor(colorActive)
+                vBar4.setBackgroundColor(colorActive)
+                tvSecurityStatus.text = "Seguridad: Muy fuerte"
+                tvSecurityStatus.setTextColor(colorActive)
+            }
+            else -> {
+                vBar1.setBackgroundColor(colorActive)
+                vBar2.setBackgroundColor(colorActive)
+                vBar3.setBackgroundColor(colorActive)
+                vBar4.setBackgroundColor(colorInactive)
+                tvSecurityStatus.text = "Seguridad: Fuerte"
+                tvSecurityStatus.setTextColor(colorActive)
+            }
         }
     }
 

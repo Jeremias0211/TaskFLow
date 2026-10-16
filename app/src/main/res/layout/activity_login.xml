@@ -201,12 +201,13 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/btnGoogle"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="18dp"
             android:background="@drawable/login_secondary_button"
             android:stateListAnimator="@null"
-            android:text="G     Google"
+            android:text="Google"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="15sp"

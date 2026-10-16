@@ -78,6 +78,7 @@
                     android:paddingEnd="20dp">
 
                     <TextView
+                        android:id="@+id/tvFilterPending"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:gravity="center"
@@ -90,6 +91,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvFilterProgress"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="10dp"
@@ -102,6 +104,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tvFilterCompleted"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="10dp"
@@ -172,6 +175,7 @@
             <!-- TABLERO HORIZONTAL -->
 
             <HorizontalScrollView
+                android:id="@+id/horizontalScrollKanban"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -189,6 +193,7 @@
                     <!-- COLUMNA PENDIENTES -->
 
                     <LinearLayout
+                        android:id="@+id/colPending"
                         android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -250,6 +255,7 @@
                     <!-- COLUMNA EN PROGRESO -->
 
                     <LinearLayout
+                        android:id="@+id/colProgress"
                         android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="14dp"
@@ -318,6 +324,7 @@
                     <!-- COLUMNA COMPLETADAS -->
 
                     <LinearLayout
+                        android:id="@+id/colCompleted"
                         android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="14dp"

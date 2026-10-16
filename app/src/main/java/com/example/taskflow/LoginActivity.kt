@@ -26,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
+        val btnGoogle = findViewById<Button>(R.id.btnGoogle)
         val tvRegister = findViewById<TextView>(R.id.tvRegister)
         val tvForgotPassword = findViewById<TextView>(R.id.tvForgotPassword)
 
@@ -125,6 +126,14 @@ class LoginActivity : AppCompatActivity() {
 
             startActivity(
                 Intent(this, RegisterActivity::class.java)
+            )
+        }
+
+        // Google login not yet configured in Firebase console
+        btnGoogle.setOnClickListener {
+            mostrarMensaje(
+                "El inicio de sesión con Google requiere configurar el proveedor OAuth en Firebase Console",
+                R.drawable.error
             )
         }
     }

@@ -53,6 +53,15 @@
                 android:textStyle="bold"
                 android:letterSpacing="0.18" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:text="Nombre completo"
+                android:textColor="#A0A0A0"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
         </LinearLayout>
 
         <!-- TITULO -->
@@ -75,15 +84,6 @@
             android:textSize="14sp" />
 
         <!-- NOMBRE -->
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:text="Nombre completo"
-            android:textColor="#A0A0A0"
-            android:textSize="13sp"
-            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/etName"
@@ -161,19 +161,14 @@
             android:orientation="horizontal">
 
             <View
+                android:id="@+id/vBar1"
                 android:layout_width="0dp"
                 android:layout_height="5dp"
                 android:layout_weight="1"
                 android:background="#39FF14" />
 
             <View
-                android:layout_width="0dp"
-                android:layout_height="5dp"
-                android:layout_marginStart="6dp"
-                android:layout_weight="1"
-                android:background="#39FF14" />
-
-            <View
+                android:id="@+id/vBar2"
                 android:layout_width="0dp"
                 android:layout_height="5dp"
                 android:layout_marginStart="6dp"
@@ -181,6 +176,15 @@
                 android:background="#39FF14" />
 
             <View
+                android:id="@+id/vBar3"
+                android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:background="#39FF14" />
+
+            <View
+                android:id="@+id/vBar4"
                 android:layout_width="0dp"
                 android:layout_height="5dp"
                 android:layout_marginStart="6dp"
@@ -190,6 +194,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tvSecurityStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
@@ -254,6 +259,7 @@
         <!-- VOLVER AL LOGIN -->
 
         <TextView
+            android:id="@+id/tvLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"

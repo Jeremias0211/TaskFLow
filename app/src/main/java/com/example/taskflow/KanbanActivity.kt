@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
@@ -27,6 +28,14 @@ class KanbanActivity : AppCompatActivity() {
     private lateinit var layoutProgress: LinearLayout
     private lateinit var layoutCompleted: LinearLayout
     private lateinit var bottomNavigation: BottomNavigationView
+
+    private lateinit var tvFilterPending: TextView
+    private lateinit var tvFilterProgress: TextView
+    private lateinit var tvFilterCompleted: TextView
+    private lateinit var horizontalScrollKanban: HorizontalScrollView
+    private lateinit var colPending: LinearLayout
+    private lateinit var colProgress: LinearLayout
+    private lateinit var colCompleted: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +59,26 @@ class KanbanActivity : AppCompatActivity() {
         layoutProgress = findViewById(R.id.layoutProgress)
         layoutCompleted = findViewById(R.id.layoutCompleted)
         bottomNavigation = findViewById(R.id.bottomNavigation)
+
+        tvFilterPending = findViewById(R.id.tvFilterPending)
+        tvFilterProgress = findViewById(R.id.tvFilterProgress)
+        tvFilterCompleted = findViewById(R.id.tvFilterCompleted)
+        horizontalScrollKanban = findViewById(R.id.horizontalScrollKanban)
+        colPending = findViewById(R.id.colPending)
+        colProgress = findViewById(R.id.colProgress)
+        colCompleted = findViewById(R.id.colCompleted)
+
+        tvFilterPending.setOnClickListener {
+            horizontalScrollKanban.smoothScrollTo(colPending.left, 0)
+        }
+
+        tvFilterProgress.setOnClickListener {
+            horizontalScrollKanban.smoothScrollTo(colProgress.left, 0)
+        }
+
+        tvFilterCompleted.setOnClickListener {
+            horizontalScrollKanban.smoothScrollTo(colCompleted.left, 0)
+        }
 
         cargarTareas()
         setupBottomNavigation(bottomNavigation, R.id.nav_kanban)
