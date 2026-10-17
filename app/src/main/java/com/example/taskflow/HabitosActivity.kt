@@ -32,8 +32,8 @@ class HabitosActivity : AppCompatActivity() {
     private lateinit var tvSemanaHabitos: TextView
     private lateinit var tvRachaGeneral: TextView
     private lateinit var tvProgresoGeneral: TextView
-    private lateinit var btnCalendarioHabitos: TextView
-    private lateinit var btnOpcionesHabitos: TextView
+    // private lateinit var btnCalendarioHabitos: TextView
+    // private lateinit var btnOpcionesHabitos: TextView
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
@@ -74,8 +74,9 @@ class HabitosActivity : AppCompatActivity() {
         tvSemanaHabitos = findViewById(R.id.tvSemanaHabitos)
         tvRachaGeneral = findViewById(R.id.tvRachaGeneral)
         tvProgresoGeneral = findViewById(R.id.tvProgresoGeneral)
-        btnCalendarioHabitos = findViewById(R.id.btnCalendarioHabitos)
-        btnOpcionesHabitos = findViewById(R.id.btnOpcionesHabitos)
+        // Botones eliminados de la vista
+        // btnCalendarioHabitos = findViewById(R.id.btnCalendarioHabitos)
+        // btnOpcionesHabitos = findViewById(R.id.btnOpcionesHabitos)
 
         adapter = HabitosAdapter(
             listaHabitos = listaHabitos,
@@ -97,32 +98,7 @@ class HabitosActivity : AppCompatActivity() {
             mostrarDialogoAgregar()
         }
 
-        // El botón de calendario vuelve a seleccionar el día actual.
-        btnCalendarioHabitos.setOnClickListener {
-            fechaSeleccionada.timeInMillis = System.currentTimeMillis()
-            actualizarSelectorSemana()
-            actualizarResumen()
-            adapter.seleccionarDia(
-                fechaSeleccionada.get(Calendar.DAY_OF_MONTH)
-            )
-        }
 
-        // Opciones útiles, sin agregar funciones ficticias.
-        btnOpcionesHabitos.setOnClickListener { vista ->
-            val menu = PopupMenu(this, vista)
-            menu.menu.add("Agregar hábito")
-            menu.menu.add("Actualizar hábitos")
-
-            menu.setOnMenuItemClickListener { opcion ->
-                when (opcion.title.toString()) {
-                    "Agregar hábito" -> mostrarDialogoAgregar()
-                    "Actualizar hábitos" -> cargarHabitos()
-                }
-                true
-            }
-
-            menu.show()
-        }
 
         configurarSelectorSemana()
         setupBottomNavigation(R.id.nav_habitos)

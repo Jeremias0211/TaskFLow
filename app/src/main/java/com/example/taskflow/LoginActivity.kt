@@ -1,5 +1,6 @@
 package com.example.taskflow
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -9,19 +10,46 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+
+    private val googleSignInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            handleGoogleSignInResult(task)
+        } else {
+            mostrarMensaje("Inicio de sesión con Google cancelado", R.drawable.error)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
 
         auth = FirebaseAuth.getInstance()
+
+        // Configurar Google Sign-In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
@@ -40,50 +68,31 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btnLogin.setOnClickListener {
-
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            // Verificar campos vacíos
             if (email.isEmpty() || password.isEmpty()) {
-
                 if (email.isEmpty()) {
                     etEmail.error = "Campo vacío"
                 }
-
                 if (password.isEmpty()) {
                     etPassword.error = "Campo vacío"
                 }
-
-                mostrarMensaje(
-                    "Completa todos los campos",
-                    R.drawable.error
-                )
-
+                mostrarMensaje("Completa todos los campos", R.drawable.error)
                 return@setOnClickListener
             }
 
-            // Iniciar sesión con Firebase
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
-
                     if (task.isSuccessful) {
-
-                        mostrarMensaje(
-                            "Inicio de sesión correcto",
-                            R.drawable.check
-                        )
-
+                        mostrarMensaje("Inicio de sesión correcto", R.drawable.check)
                         val intent = Intent(this, DashboardActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
-
                     } else {
-
                         mostrarMensaje(
-                            task.exception?.localizedMessage
-                                ?: "Correo o contraseña incorrectos",
+                            task.exception?.localizedMessage ?: "Correo o contraseña incorrectos",
                             R.drawable.error
                         )
                     }
@@ -123,43 +132,58 @@ class LoginActivity : AppCompatActivity() {
 
         // Ir al registro
         tvRegister.setOnClickListener {
-
-            startActivity(
-                Intent(this, RegisterActivity::class.java)
-            )
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        // Google login not yet configured in Firebase console
+        // Google login
         btnGoogle.setOnClickListener {
-            mostrarMensaje(
-                "El inicio de sesión con Google requiere configurar el proveedor OAuth en Firebase Console",
-                R.drawable.error
-            )
+            signInWithGoogle()
         }
     }
 
+    private fun signInWithGoogle() {
+        val signInIntent = googleSignInClient.signInIntent
+        googleSignInLauncher.launch(signInIntent)
+    }
+
+    private fun handleGoogleSignInResult(task: Task<GoogleSignInAccount>) {
+        try {
+            val account = task.getResult(ApiException::class.java)
+            if (account != null) {
+                firebaseAuthWithGoogle(account.idToken!!)
+            }
+        } catch (e: ApiException) {
+            mostrarMensaje("Error al iniciar sesión con Google: ${e.statusCode}", R.drawable.error)
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    mostrarMensaje("Inicio de sesión correcto", R.drawable.check)
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                } else {
+                    mostrarMensaje(
+                        task.exception?.localizedMessage ?: "Error al autenticar con Google",
+                        R.drawable.error
+                    )
+                }
+            }
+    }
+
     // Toast personalizado con imagen
-    private fun mostrarMensaje(
-        mensaje: String,
-        imagen: Int
-    ) {
-
-        val vista = LayoutInflater.from(this)
-            .inflate(R.layout.toast_custom, null)
-
-        val icono = vista.findViewById<ImageView>(
-            R.id.toastIcon
-        )
-
-        val texto = vista.findViewById<TextView>(
-            R.id.toastText
-        )
-
+    private fun mostrarMensaje(mensaje: String, imagen: Int) {
+        val vista = LayoutInflater.from(this).inflate(R.layout.toast_custom, null)
+        val icono = vista.findViewById<ImageView>(R.id.toastIcon)
+        val texto = vista.findViewById<TextView>(R.id.toastText)
         icono.setImageResource(imagen)
         texto.text = mensaje
-
         val toast = Toast(this)
-
         toast.duration = Toast.LENGTH_SHORT
         toast.view = vista
         toast.show()

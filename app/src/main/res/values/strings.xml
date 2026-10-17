@@ -7,4 +7,5 @@
 
     <string name="btn_add">Agregar tarea</string>
     <string name="task_list">Lista de tareas:</string>
+    <string name="default_web_client_id">616795824288-knqq8jefnvd4hgpfduetn54qplbfuqcf.apps.googleusercontent.com</string>
 </resources>
